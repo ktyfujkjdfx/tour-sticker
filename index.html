@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<meta name="format-detection" content="telephone=no">
+<title>Стикер</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--ink:#0F3C4A;--text:#14272d;--muted:#6f8085;--line:#e3e8ea;--soft:#f3f5f6;--surface:#edf1f2}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+button,.tab,.ib,.sw{touch-action:manipulation}
+body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:var(--text);background:#fff;-webkit-font-smoothing:antialiased}
+button,input{font-family:inherit;color:inherit}
+button{cursor:pointer}
+
+/* ---------- Desktop: one-screen landing ---------- */
+.app{display:grid;grid-template-columns:460px 1fr;grid-template-rows:auto 1fr auto auto;grid-template-areas:"head head" "cols stage" "cols pal" "cols act";
+  gap:0 40px;max-width:1240px;height:100vh;min-height:640px;margin:0 auto;padding:28px 40px 32px}
+.top{display:contents}
+header{grid-area:head;display:flex;align-items:center;justify-content:space-between;padding-bottom:22px}
+header h1{margin:0;font-size:24px;font-weight:600;letter-spacing:-.02em}
+.hbtns{display:flex;gap:8px}
+.ghost{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;font-size:14px;font-weight:500}
+.ghost:hover{background:var(--soft)}
+.copy-sm,.reset-m{display:none}
+
+.stage{grid-area:stage;background:var(--surface);border-radius:20px;display:flex;align-items:center;justify-content:center;padding:28px;min-height:0}
+.stage img{display:block;width:111%;max-width:none;margin:0 -5.5%;max-height:100%;object-fit:contain;-webkit-touch-callout:default;cursor:pointer}
+.tabs{display:none}
+
+.cols{grid-area:cols;display:flex;flex-direction:column;gap:12px;min-height:0;overflow:auto}
+.col{border:1px solid var(--line);border-radius:16px;padding:14px 16px 12px}
+.col-h{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin:0 0 10px}
+.fields{display:grid;gap:10px;grid-template-columns:1fr 1fr}
+.fields label{display:block;min-width:0}
+.fields span{display:block;font-size:12px;color:var(--muted);margin:0 0 5px 2px}
+.fields input{-webkit-appearance:none;appearance:none;color:var(--text);width:100%;font-size:16px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;outline:none;transition:border-color .15s,box-shadow .15s}
+.fields input:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(15,60,74,.08)}
+.fields input.a{font-weight:600}
+.icons{display:flex;gap:4px;margin-top:10px}
+.ib{flex:none;width:30px;height:30px;border-radius:8px;border:none;background:transparent;display:grid;place-items:center;color:#8a999d;padding:0}
+.ib svg{width:20px;height:20px;display:block}
+.ib:hover{background:var(--soft);color:var(--ink)}
+.ib.on{background:var(--ink);color:#fff}
+.ib:focus,.sw:focus,.tab:focus,.auto:focus{outline:none}
+.ib:focus-visible,.sw:focus-visible,.tab:focus-visible,.auto:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+
+.pal{grid-area:pal;display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px;padding-top:20px}
+.pal>b{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.sws{display:flex;gap:14px}
+.sw{display:flex;flex-direction:column;align-items:center;gap:6px;border:none;background:none;padding:0;font-size:12px;color:var(--muted);min-width:40px}
+.sw i{width:34px;height:34px;border-radius:50%;display:block;box-shadow:inset 0 0 0 1px rgba(0,0,0,.09);position:relative}
+.sw i::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1.5px solid transparent}
+.sw.on{color:var(--text);font-weight:600}
+.sw.on i::after{border-color:var(--ink)}
+.sw .rb{background:conic-gradient(#ff8a8a,#ffd36e,#9be38a,#6fd6e0,#7aa7ff,#c69bff,#ff8a8a)}
+.sw .rb::before{content:"";position:absolute;inset:9px;border-radius:50%;background:var(--cbg,#fff);box-shadow:0 0 0 2px #fff}
+.custom{display:none;align-items:center;gap:28px;width:100%;padding-left:58px}
+.custom.show{display:flex}
+.cp{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.cp input[type=color]{-webkit-appearance:none;appearance:none;width:32px;height:32px;border:none;border-radius:50%;padding:0;background:none;cursor:pointer;flex:none}
+.cp input[type=color]::-webkit-color-swatch-wrapper{padding:0}
+.cp input[type=color]::-webkit-color-swatch{border:1px solid rgba(0,0,0,.12);border-radius:50%}
+.cp input[type=color]::-moz-color-swatch{border:1px solid rgba(0,0,0,.12);border-radius:50%}
+.cp .ctl{display:flex;align-items:center;gap:8px}
+.cp input.hex{-webkit-appearance:none;appearance:none;width:104px;font-size:16px;padding:7px 10px;background:#fff;color:#111;border:1px solid #111;border-radius:9px;text-transform:uppercase;outline:none;font-variant-numeric:tabular-nums;box-shadow:none}
+.cp input.hex:focus{border-color:#000;box-shadow:0 0 0 3px rgba(0,0,0,.08)}
+.auto{border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 10px;font-size:13px;font-weight:500;color:var(--muted)}
+.auto.on{background:var(--ink);border-color:var(--ink);color:#fff}
+
+.act{grid-area:act;display:flex;align-items:center;gap:16px;padding-top:20px}
+.copy{border:none;background:var(--ink);color:#fff;border-radius:12px;padding:14px 26px;font-size:15px;font-weight:600;white-space:nowrap}
+.copy:active,.copy-sm:active{opacity:.85}
+.note{font-size:13px;color:var(--muted);line-height:1.45}
+.msg{font-size:13px;font-weight:500;color:var(--ink)}
+.msg:empty{display:none}
+
+/* ---------- iPhone ---------- */
+@media (max-width:860px){
+  body{background:#fff}
+  .app{display:block;height:auto;min-height:0;padding:0}
+  .top{display:block;position:sticky;top:0;z-index:10;background:rgba(255,255,255,.96);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);padding:calc(env(safe-area-inset-top) + 12px) 16px 12px;border-bottom:1px solid var(--line)}
+  header{padding-bottom:12px}
+  header h1{font-size:22px}
+  #reset{display:none}
+  .copy-sm{display:block;border:none;background:var(--ink);color:#fff;border-radius:10px;padding:9px 15px;font-size:15px;font-weight:600}
+  .stage{background:none;padding:0;border-radius:0;overflow:visible}
+  .stage img{width:111%;max-width:none;margin:-3.5% -5.5% -5%}
+  .tabs{display:flex;gap:2px;margin-top:12px;padding:3px;background:var(--soft);border-radius:13px}
+  .tab{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;border:none;background:transparent;border-radius:10px;padding:7px 2px 6px;font-size:11.5px;font-weight:500;color:var(--muted)}
+  .tab svg{width:20px;height:20px;display:block}
+  .tab .dot{width:20px;height:20px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.14)}
+  .tab em{font-style:normal;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tab.on{background:#fff;color:var(--ink);font-weight:600;box-shadow:0 1px 3px rgba(15,40,48,.12)}
+  .cols{display:block;overflow:visible;padding:16px 16px 0}
+  .col{display:none;border:none;padding:0}
+  .col.show{display:block}
+  .col-h{display:none}
+  .fields{grid-template-columns:1fr;gap:12px}
+  .fields input{padding:13px 14px;border-radius:12px}
+  .icons{overflow-x:auto;margin:16px -16px 0;padding:0 16px 4px;gap:6px;scrollbar-width:none}
+  .icons::-webkit-scrollbar{display:none}
+  .ib{width:44px;height:44px;border-radius:12px;background:var(--soft);color:#6f8388}
+  .ib svg{width:22px;height:22px}
+  .pal{display:none;padding:16px 16px 0}
+  .pal.show{display:flex}
+  .pal>b{display:none}
+  .sws{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;width:100%}
+  .sw{font-size:11px;min-width:0}
+  .sw i{width:36px;height:36px}
+  .sw .rb::before{inset:10px}
+  .custom{flex-direction:column;align-items:stretch;gap:10px;padding:14px;background:var(--soft);border-radius:14px}
+  .cp input.hex{width:100px}
+  .cp{justify-content:space-between;font-size:15px;color:var(--text)}
+  .cp .ctl{display:flex;align-items:center;gap:8px}
+  .cp input[type=color]{width:36px;height:36px}
+  .act{display:block;padding:22px 16px calc(env(safe-area-inset-bottom) + 28px);text-align:center}
+  .act .copy{display:none}
+  .msg{margin-bottom:8px}
+  .note{font-size:12.5px;max-width:320px;margin:0 auto}
+  .reset-m{display:inline-block;margin-top:14px;border:none;background:none;color:var(--muted);font-size:14px;text-decoration:underline;text-underline-offset:3px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <header>
+      <h1>Стикер</h1>
+      <div class="hbtns">
+        <button class="ghost" id="reset">Сбросить</button>
+        <button class="copy-sm" id="copy2">Скопировать</button>
+      </div>
+    </header>
+    <div class="stage"><img id="out" alt="Стикер"></div>
+    <nav class="tabs" id="tabs"></nav>
+  </div>
+
+  <section class="cols" id="cols"></section>
+
+  <div class="pal" id="pal">
+    <b>Цвет</b>
+    <div class="sws" id="sws"></div>
+    <div class="custom" id="custom">
+      <label class="cp"><span>Фон</span><span class="ctl"><input type="color" id="cBg" aria-label="Цвет фона"><input class="hex" id="cBgHex" type="text" maxlength="7" autocomplete="off" spellcheck="false" aria-label="HEX фона"></span></label>
+      <div class="cp"><span>Иконки</span><span class="ctl"><input type="color" id="cIc" aria-label="Цвет иконок"><input class="hex" id="cIcHex" type="text" maxlength="7" autocomplete="off" spellcheck="false" aria-label="HEX иконок"><button type="button" class="auto" id="cAuto">Авто</button></span></div>
+    </div>
+  </div>
+
+  <div class="act">
+    <button class="copy" id="copy1">Скопировать стикер</button>
+    <div>
+      <div class="msg" id="msg"></div>
+      <div class="note">Чтобы сохранить на iPhone, удерживайте стикер и выберите «Сохранить в Фото» или «Скопировать». Фон вокруг прозрачный. В сторис стикер можно увеличить двумя пальцами.</div>
+      <button class="reset-m" id="reset2">Сбросить к образцу</button>
+    </div>
+  </div>
+</div>
+<script>
+const ICONS = {
+  calendar:{n:'Даты', d:'<rect x="3.5" y="5" width="17" height="15.5" rx="2.6"/><path d="M3.5 9.8h17M8 3v3.6M16 3v3.6"/><path d="M8 13.6h.01M12 13.6h.01M16 13.6h.01M8 17h.01M12 17h.01" stroke-width="2.1"/>'},
+  plane:{n:'Перелёт', d:'<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>'},
+  moon:{n:'Ночи', d:'<path d="M20 14.2A8.2 8.2 0 1 1 9.8 4a6.6 6.6 0 0 0 10.2 10.2z"/>'},
+  bed:{n:'Номер', d:'<path d="M3 5.5V19M3 15h18v4"/><rect x="5.4" y="10" width="4.4" height="2.6" rx="1.3"/><path d="M12 15v-4.4c0-.6.4-1 1-1h5a3 3 0 0 1 3 3V15"/>'},
+  family:{n:'Семья', d:'<circle cx="7" cy="6" r="2.3"/><circle cx="17" cy="6" r="2.3"/><circle cx="12" cy="11.4" r="1.7"/><path d="M2.8 20v-3.1A4.3 4.3 0 0 1 7.1 12.6h.5M21.2 20v-3.1a4.3 4.3 0 0 0-4.3-4.3h-.5M9 20v-.9a3 3 0 0 1 6 0v.9"/>'},
+  dining:{n:'Питание', vb:'0.3 0 24 24', d:'<path d="M8.76 7.76A6 6 0 0 1 17.24 7.76M17.24 16.24A6 6 0 0 1 8.76 16.24"/><circle cx="13" cy="12" r="3.5"/><path d="M1.2 4.6v3.8a2.2 2.2 0 0 0 4.4 0V4.6M3.4 4.6v6M3.4 12.4v7"/><path d="M23.4 11.8V4.6c-1.9.7-3 2.7-3 5.4v1.8z"/><path d="M21.9 13.5v5.9"/>'},
+  cocktail:{n:'Бар', d:'<path d="M4.5 5h15L12 13.5z"/><path d="M12 13.5v7M8.5 20.5h7M7.2 8h9.6"/><path d="M15.6 2.4l-1.4 3.2"/>'},
+  beach:{n:'Пляж', d:'<path d="M3.8 11.5a8.2 8.2 0 0 1 16.4 0z"/><path d="M12 11.5v6.8"/><path d="M2.8 21.2c1.5 0 1.5-1 3.07-1s1.53 1 3.07 1 1.53-1 3.06-1 1.53 1 3.07 1 1.53-1 3.06-1 1.54 1 3.07 1"/>'},
+  sea:{n:'Море', d:'<path d="M2.8 8c1.5 0 1.5-1 3.07-1s1.53 1 3.07 1 1.53-1 3.06-1 1.53 1 3.07 1 1.53-1 3.06-1 1.54 1 3.07 1M2.8 12.5c1.5 0 1.5-1 3.07-1s1.53 1 3.07 1 1.53-1 3.06-1 1.53 1 3.07 1 1.53-1 3.06-1 1.54 1 3.07 1M2.8 17c1.5 0 1.5-1 3.07-1s1.53 1 3.07 1 1.53-1 3.06-1 1.53 1 3.07 1 1.53-1 3.06-1 1.54 1 3.07 1"/>'},
+  sun:{n:'Солнце', d:'<circle cx="12" cy="12" r="3.9"/><path d="M12 2.6v2.1M12 19.3v2.1M2.6 12h2.1M19.3 12h2.1M5.35 5.35l1.5 1.5M17.15 17.15l1.5 1.5M5.35 18.65l1.5-1.5M17.15 6.85l1.5-1.5"/>'},
+  star:{n:'Звёзды', d:'<path d="M12 3.3l2.55 5.3 5.8.8-4.2 4.05 1.03 5.77L12 16.5l-5.18 2.72 1.03-5.77L3.65 9.4l5.8-.8z"/>'},
+  pin:{n:'Место', d:'<path d="M12 21s-6.6-5.7-6.6-11.1a6.6 6.6 0 0 1 13.2 0C18.6 15.3 12 21 12 21z"/><circle cx="12" cy="9.9" r="2.4"/>'}
+};
+/* =====================================================================
+   Icons — one library: same stroke, optically equal size, true centre.
+   Each icon is measured once; its viewBox is re-centred on the real
+   shape and scaled so every icon covers a similar visual area. The
+   stroke is compensated so the rendered line weight stays identical.
+   ===================================================================== */
+const ICON_STROKE = 1.6;
+(function normaliseIcons() {
+  const NS = 'http://www.w3.org/2000/svg';
+  const s = document.createElementNS(NS, 'svg');
+  s.setAttribute('width', '240'); s.setAttribute('height', '240'); s.setAttribute('viewBox', '0 0 24 24');
+  s.style.cssText = 'position:absolute;left:-9999px;top:0;visibility:hidden';
+  document.body.appendChild(s);
+  const TARGET = 16.8, MAX_SIDE = 20.4;
+  for (const k in ICONS) {
+    const g = document.createElementNS(NS, 'g');
+    g.innerHTML = ICONS[k].d; s.appendChild(g);
+    try {
+      const b = g.getBBox();
+      const w = Math.max(b.width, 1), h = Math.max(b.height, 1);
+      let z = TARGET / Math.sqrt(w * h);                 // equal visual area
+      z *= ({plane:1.02, moon:1.04, pin:.9, sea:.8, sun:1.06, cocktail:.97, beach:.98}[k] || 1);   // optical corrections
+      const off = ({moon:[.7, 0], bed:[0, -.3]}[k] || [0, 0]);                                       // optical centre shift
+      z = Math.min(Math.max(z, .86), 1.22);
+      z = Math.min(z, MAX_SIDE / Math.max(w, h));        // never too large
+      const side = 24 / z, cx = b.x + w / 2 - off[0], cy = b.y + h / 2 - off[1];
+      ICONS[k].vb = `${(cx - side / 2).toFixed(3)} ${(cy - side / 2).toFixed(3)} ${side.toFixed(3)} ${side.toFixed(3)}`;
+      ICONS[k].z = z;
+    } catch (e) { ICONS[k].z = 1; }
+  }
+  s.remove();
+})();
+
+/* =====================================================================
+   Colour system — turquoise & soft sky blue only (client's gamut).
+   ===================================================================== */
+const PALETTES = [
+  {id:'white',  name:'Белый',    bg:'#FFFFFF', ink:'#0D3540', sub:'#3E5C64', icon:'#177E84', div:'rgba(13,53,64,.13)', edge:'rgba(13,53,64,.09)'},
+  {id:'aqua',   name:'Аква',     bg:'#E4F4F1', ink:'#0B383B', sub:'#345A5B', icon:'#167770', div:'rgba(11,56,59,.14)', edge:'rgba(11,56,59,.08)', inner:true},
+  {id:'tiff',   name:'Бирюза',   bg:'#C7E8E3', ink:'#09363A', sub:'#2C5557', icon:'#106B67', div:'rgba(9,54,58,.15)',  edge:'rgba(9,54,58,.09)',  inner:true},
+  {id:'sky',    name:'Небо',     bg:'#E6F0F7', ink:'#0F2F47', sub:'#3A5369', icon:'#2C6996', div:'rgba(15,47,71,.13)', edge:'rgba(15,47,71,.08)', inner:true},
+  {id:'mist',   name:'Голубой',  bg:'#CFE2EE', ink:'#0D2C44', sub:'#33506A', icon:'#245F8A', div:'rgba(13,44,68,.15)', edge:'rgba(13,44,68,.09)', inner:true},
+  {id:'deep',   name:'Лагуна',   bg:'#114B55', ink:'#FFFFFF', sub:'rgba(255,255,255,.84)', icon:'#9FDCDC', div:'rgba(255,255,255,.18)', edge:'rgba(255,255,255,.10)', dark:true}
+];
+
+const hexOk = h => /^#([0-9a-f]{6})$/i.test(h);
+const normHex = v => {
+  v = (v || '').trim().replace(/^#?/, '#');
+  if (/^#[0-9a-f]{3}$/i.test(v)) v = '#' + v.slice(1).split('').map(c => c + c).join('');
+  return hexOk(v) ? v.toUpperCase() : null;
+};
+const rgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+const lum = h => { const [r, g, b] = rgb(h).map(v => { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }); return .2126 * r + .7152 * g + .0722 * b; };
+const contrast = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + .05) / (Math.min(x, y) + .05); };
+function hsl(h) {
+  let [r, g, b] = rgb(h).map(v => v / 255);
+  const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2;
+  let H = 0, S = 0;
+  if (mx !== mn) {
+    const d = mx - mn; S = l > .5 ? d / (2 - mx - mn) : d / (mx + mn);
+    H = mx === r ? (g - b) / d + (g < b ? 6 : 0) : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; H *= 60;
+  }
+  return [H, S * 100, l * 100];
+}
+function toHex(H, S, L) {
+  S /= 100; L /= 100;
+  const k = n => (n + H / 30) % 12, a = S * Math.min(L, 1 - L);
+  const f = n => L - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+  return '#' + [f(0), f(8), f(4)].map(x => Math.round(x * 255).toString(16).padStart(2, '0')).join('').toUpperCase();
+}
+const rgba = (h, a) => `rgba(${rgb(h).join(',')},${a})`;
+const isDark = bg => contrast(bg, '#FFFFFF') > contrast(bg, '#0D2A33');
+// readable accent in the background's own hue: contrast ≥ 3.2 against the card
+function autoIcon(bg) {
+  const [H, S] = hsl(bg), dark = isDark(bg);
+  if (S < 7) return dark ? '#FFFFFF' : '#1B4A55';
+  const sat = Math.min(Math.max(S, 38), 62);
+  let L = dark ? 80 : 33, c = toHex(H, sat, L);
+  while (contrast(c, bg) < 3.2 && L > 8 && L < 96) { L += dark ? 3 : -3; c = toHex(H, sat, L); }
+  return c;
+}
+function autoInk(bg) {
+  if (isDark(bg)) return '#FFFFFF';
+  const [H, S] = hsl(bg);
+  let L = 14, c = S < 7 ? '#14232A' : toHex(H, Math.min(S, 55), L);
+  while (contrast(c, bg) < 9 && L > 4) { L -= 2; c = toHex(H, Math.min(S, 55), L); }
+  return c;
+}
+function customPalette(cs) {
+  const bg = cs.bg, dark = isDark(bg), ink = autoInk(bg);
+  return {
+    id:'custom', name:'Свой', bg, ink, dark,
+    sub: dark ? 'rgba(255,255,255,.84)' : rgba(ink, .80),
+    icon: cs.icon || autoIcon(bg),
+    div: dark ? 'rgba(255,255,255,.18)' : rgba(ink, .14),
+    edge: dark ? 'rgba(255,255,255,.10)' : rgba(ink, .09),
+    inner: !dark && lum(bg) < .92
+  };
+}
+
+/* =====================================================================
+   State
+   ===================================================================== */
+const DEFAULTS = {
+  palette:'white',
+  custom:{bg:'#D6ECEF', icon:null},
+  cols:[
+    {icon:'calendar', a:'17 ноября', b:'6 ночей'},
+    {icon:'bed',      a:'Superior Land View', b:'2 взр + реб'},
+    {icon:'dining',   a:'UAI', b:'Ультра всё включено'}
+  ]
+};
+const KEY = 'tourSticker.v6';
+const clone = o => JSON.parse(JSON.stringify(o));
+let state;
+try { state = JSON.parse(localStorage.getItem(KEY)); } catch (e) { state = null; }
+if (!state || !Array.isArray(state.cols) || state.cols.length !== 3) state = clone(DEFAULTS);
+if (!state.custom || !hexOk(state.custom.bg)) state.custom = clone(DEFAULTS.custom);
+if (state.palette !== 'custom' && !PALETTES.some(p => p.id === state.palette)) state.palette = 'white';
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
+const palette = () => state.palette === 'custom' ? customPalette(state.custom) : (PALETTES.find(x => x.id === state.palette) || PALETTES[0]);
+let active = 0; // iPhone tab: 0..2 = columns, 3 = colour
+
+const $ = id => document.getElementById(id);
+const esc = s => s.replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+const svg = (name, color, size, sw = ICON_STROKE) => {
+  const ic = ICONS[name] || ICONS.star;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${ic.vb || '0 0 24 24'}"${size ? ` width="${size}" height="${size}"` : ''} fill="none" stroke="${color}" stroke-width="${(sw / (ic.z || 1)).toFixed(3)}" stroke-linecap="round" stroke-linejoin="round">${ic.d}</svg>`;
+};
+const isMobile = () => matchMedia('(max-width:860px)').matches;
+
+/* =====================================================================
+   Editor UI (unchanged behaviour)
+   ===================================================================== */
+function buildCols() {
+  const box = $('cols'); box.innerHTML = '';
+  state.cols.forEach((c, i) => {
+    const el = document.createElement('div');
+    el.className = 'col'; el.dataset.i = i;
+    el.innerHTML = `
+      <p class="col-h">Колонка ${i + 1}</p>
+      <div class="fields">
+        <label><span>Главная строка</span><input class="a" type="text" enterkeyhint="next" autocomplete="off"></label>
+        <label><span>Вторая строка</span><input class="b" type="text" enterkeyhint="done" autocomplete="off" placeholder="можно оставить пустой"></label>
+      </div>
+      <div class="icons"></div>`;
+    const ia = el.querySelector('input.a'), ib = el.querySelector('input.b');
+    ia.value = c.a; ib.value = c.b;
+    ia.addEventListener('input', () => { c.a = ia.value; changed(); });
+    ib.addEventListener('input', () => { c.b = ib.value; changed(); });
+    ia.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); ib.focus(); } });
+    ib.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); ib.blur(); } });
+    const icons = el.querySelector('.icons');
+    Object.keys(ICONS).forEach(k => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'ib' + (c.icon === k ? ' on' : '');
+      b.title = ICONS[k].n; b.setAttribute('aria-label', ICONS[k].n);
+      b.innerHTML = svg(k, 'currentColor', null, 1.7);
+      b.onclick = () => { c.icon = k; icons.querySelectorAll('.ib').forEach(x => x.classList.toggle('on', x === b)); changed(); };
+      icons.appendChild(b);
+    });
+    box.appendChild(el);
+  });
+}
+function buildPal() {
+  const box = $('sws'); box.innerHTML = '';
+  [...PALETTES, {id:'custom', name:'Свой'}].forEach(p => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'sw' + (state.palette === p.id ? ' on' : '');
+    b.innerHTML = p.id === 'custom' ? `<i class="rb" style="--cbg:${state.custom.bg}"></i>${p.name}` : `<i style="background:${p.bg}"></i>${p.name}`;
+    b.onclick = () => { state.palette = p.id; buildPal(); changed(); };
+    box.appendChild(b);
+  });
+  syncCustom();
+}
+function syncCustom() {
+  $('custom').classList.toggle('show', state.palette === 'custom');
+  const p = customPalette(state.custom);
+  $('cBg').value = state.custom.bg.toLowerCase();
+  if (document.activeElement !== $('cBgHex')) $('cBgHex').value = state.custom.bg;
+  $('cIc').value = p.icon.toLowerCase();
+  if (document.activeElement !== $('cIcHex')) $('cIcHex').value = p.icon;
+  $('cAuto').classList.toggle('on', !state.custom.icon);
+  const rb = document.querySelector('.sw .rb'); if (rb) rb.style.setProperty('--cbg', state.custom.bg);
+}
+function setCustomBg(v) { const h = normHex(v); if (!h) return; state.custom.bg = h; state.palette = 'custom'; syncCustom(); changed(); }
+function setCustomIcon(v) { const h = normHex(v); if (!h) return; state.custom.icon = h; syncCustom(); changed(); }
+$('cBg').addEventListener('input', e => setCustomBg(e.target.value));
+$('cBgHex').addEventListener('input', e => setCustomBg(e.target.value));
+$('cIc').addEventListener('input', e => setCustomIcon(e.target.value));
+$('cIcHex').addEventListener('input', e => setCustomIcon(e.target.value));
+['cBgHex', 'cIcHex'].forEach(id => $(id).addEventListener('blur', syncCustom));
+$('cAuto').onclick = () => { state.custom.icon = null; syncCustom(); changed(); };
+
+function buildTabs() {
+  const box = $('tabs'); box.innerHTML = '';
+  state.cols.forEach((c, i) => {
+    const t = document.createElement('button');
+    t.type = 'button'; t.className = 'tab' + (active === i ? ' on' : '');
+    t.innerHTML = `${svg(c.icon, 'currentColor', null, 1.8)}<em>${esc(ICONS[c.icon]?.n || 'Колонка ' + (i + 1))}</em>`;
+    t.onclick = () => setActive(i, true);
+    box.appendChild(t);
+  });
+  const t = document.createElement('button');
+  t.type = 'button'; t.className = 'tab' + (active === 3 ? ' on' : '');
+  t.innerHTML = `<i class="dot" style="background:${palette().bg}"></i><em>Цвет</em>`;
+  t.onclick = () => setActive(3, false);
+  box.appendChild(t);
+}
+function setActive(i, focus) {
+  active = i;
+  document.querySelectorAll('.col').forEach(c => c.classList.toggle('show', +c.dataset.i === i));
+  $('pal').classList.toggle('show', i === 3);
+  buildTabs();
+  if (focus && i < 3) document.querySelector(`.col[data-i="${i}"] input.a`)?.focus({preventScroll: true});
+}
+function changed() { save(); draw(); buildTabs(); }
+
+/* =====================================================================
+   Typography
+   Main line  — Inter Semibold; day numbers (1–2 digits, ranges) set
+                larger in Bold; abbreviations (UAI, AI, HB) Bold with
+                open tracking, so each reads as its own accent.
+   Second line — Inter Medium, smaller, calmer colour, still dark.
+   Every column is fitted on its own; one column never resizes another.
+   ===================================================================== */
+const U = 800;                 // card width, design units
+const M = 44;                  // transparent margin for the shadow
+const S = 2.4;                 // export scale → PNG ≈ 2130 px wide
+const R = 26;                  // corner radius
+const PAD_X = 18, PAD_T = 26, PAD_B = 27;
+const ICON = 38, ICON_GAP = 13, AB_GAP = 5;
+const A = {size:29, soft:26, min:21, w:600, lh:1.16};
+const B = {size:21, soft:19, min:16, w:500, lh:1.24};
+const NUM_SCALE = 1.16, ABBR_TRACK = .06;
+const MAX_LINES = 2;
+const FONT = 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+const CAP = .727;              // Inter cap height / em
+const setFont = (ctx, w, s) => { ctx.font = `${w} ${s}px ${FONT}`; };
+
+const NBSP = ' ';
+const isDay  = t => /^\d{1,2}([–\-.]\d{1,2})?$/.test(t);
+const isAbbr = t => /^[A-ZА-ЯЁ]{2,5}\+?$/.test(t);
+const isSep  = t => /^[—–\-\/+|·]$/.test(t);
+
+// glue: short words stick to the next word; lone dashes/slashes stick to the previous one
+function glue(text) {
+  const w = text.replace(/\s+/g, ' ').trim().split(' ').filter(Boolean), out = [];
+  for (let i = 0; i < w.length; i++) {
+    const t = w[i];
+    if (isSep(t) && t !== '+' && out.length) { out[out.length - 1] += NBSP + t; continue; }
+    if (out.length && out[out.length - 1].endsWith(NBSP)) out[out.length - 1] += t; else out.push(t);
+    if ((t.length <= 2 || t === '+') && i < w.length - 1) out[out.length - 1] += NBSP;
+  }
+  return out;                                   // array of break units, words inside joined by NBSP
+}
+function styleFor(tok, spec, base, rich) {
+  if (rich && isDay(tok))  return {w: 700, s: base * NUM_SCALE, tr: 0};
+  if (rich && isAbbr(tok)) return {w: 700, s: base, tr: ABBR_TRACK};
+  return {w: spec.w, s: base, tr: 0};
+}
+function tokW(ctx, t, st) {
+  setFont(ctx, st.w, st.s);
+  return ctx.measureText(t).width + (st.tr ? st.tr * st.s * (t.length - 1) : 0);
+}
+// a unit = words joined by NBSP; returns its parts with styles and its width
+function measureUnit(ctx, unit, spec, base, rich) {
+  setFont(ctx, spec.w, base); const sp = ctx.measureText(' ').width;
+  const parts = unit.split(NBSP).map(t => { const st = styleFor(t, spec, base, rich); return {t, st, w: tokW(ctx, t, st)}; });
+  return {parts, w: parts.reduce((a, p) => a + p.w, 0) + sp * (parts.length - 1), sp};
+}
+function layoutLines(units, maxW) {
+  const lines = []; let cur = null;
+  for (const u of units) {
+    if (!cur) { cur = {units: [u], w: u.w}; continue; }
+    const nw = cur.w + u.sp + u.w;
+    if (nw <= maxW) { cur.units.push(u); cur.w = nw; } else { lines.push(cur); cur = {units: [u], w: u.w}; }
+  }
+  if (cur) lines.push(cur);
+  return lines;
+}
+// balanced: same number of lines as greedy, but with even lengths
+function balanced(units, maxW) {
+  const base = layoutLines(units, maxW);
+  if (base.length < 2) return base;
+  let lo = 0, hi = maxW;
+  for (let k = 0; k < 18; k++) { const mid = (lo + hi) / 2; if (layoutLines(units, mid).length <= base.length) hi = mid; else lo = mid; }
+  return layoutLines(units, hi);
+}
+function fitBlock(ctx, text, spec, maxW, rich) {
+  const raw = glue(text);
+  if (!raw.length) return {lines: [], h: 0};
+  const build = base => {
+    let units = raw.map(u => measureUnit(ctx, u, spec, base, rich));
+    // a glued group wider than the column is split back into words
+    units = units.flatMap(u => u.w > maxW && u.parts.length > 1 ? u.parts.map(p => measureUnit(ctx, p.t, spec, base, rich)) : [u]);
+    return units;
+  };
+  let base = spec.size, units = build(base);
+  const oneLine = us => us.reduce((a, u, i) => a + u.w + (i ? u.sp : 0), 0);
+  // 1) a slightly smaller single line beats a needless wrap
+  for (let b = spec.size; b >= spec.soft; b -= .5) { const us = build(b); if (oneLine(us) <= maxW) { base = b; units = us; break; } }
+  let lines;
+  for (;;) {
+    units = build(base);
+    const widest = Math.max(...units.map(u => u.w));
+    if (widest > maxW && base > 11) { base -= .5; continue; }   // long single word
+    lines = balanced(units, maxW);
+    if (lines.length > MAX_LINES && base > spec.min) { base -= .5; continue; }
+    break;
+  }
+  const lh = base * spec.lh;
+  return {lines, base, lh, h: lines.length * lh, spec};
+}
+
+/* =====================================================================
+   Rendering
+   ===================================================================== */
+function rr(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+const iconCache = {};
+function iconImg(name, color) {
+  const k = name + '|' + color;
+  if (!iconCache[k]) iconCache[k] = new Promise(res => {
+    const im = new Image();
+    im.onload = () => res(im); im.onerror = () => res(null);
+    im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg(name, color, 256, ICON_STROKE));
+  });
+  return iconCache[k];
+}
+function drawLines(ctx, blk, cx, y, color) {
+  ctx.fillStyle = color; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+  blk.lines.forEach(line => {
+    const baseY = y + blk.lh / 2 + (blk.base * CAP) / 2;     // cap height optically centred in the line box
+    let x = cx - line.w / 2;
+    line.units.forEach((u, ui) => {
+      if (ui) x += u.sp;
+      u.parts.forEach((p, pi) => {
+        if (pi) x += u.sp;
+        setFont(ctx, p.st.w, p.st.s);
+        if (p.st.tr) {
+          for (const ch of p.t) { ctx.fillText(ch, x, baseY); x += ctx.measureText(ch).width + p.st.tr * p.st.s; }
+          x -= p.st.tr * p.st.s;
+        } else { ctx.fillText(p.t, x, baseY); x += ctx.measureText(p.t).width; }
+      });
+    });
+    y += blk.lh;
+  });
+  return y;
+}
+
+let canvas = null, token = 0;
+async function draw() {
+  const t = ++token;
+  const p = palette();
+  const imgs = await Promise.all(state.cols.map(c => iconImg(c.icon, p.icon)));
+  if (t !== token) return;
+
+  const meas = document.createElement('canvas').getContext('2d');
+  const colW = U / 3, maxW = colW - PAD_X * 2;
+  const blocks = state.cols.map(c => {
+    const a = fitBlock(meas, c.a, A, maxW, true);
+    const b = fitBlock(meas, c.b, B, maxW, false);
+    return {a, b, h: a.h + (a.h && b.h ? AB_GAP : 0) + b.h};
+  });
+  const minText = A.size * A.lh + AB_GAP + B.size * B.lh;      // stable height for short values
+  const textH = Math.max(minText, ...blocks.map(b => b.h));
+  const H = Math.round(PAD_T + ICON + ICON_GAP + textH + PAD_B);
+
+  const c = document.createElement('canvas');
+  c.width = Math.round((U + M * 2) * S); c.height = Math.round((H + M * 2) * S);
+  const ctx = c.getContext('2d');
+  ctx.scale(S, S); ctx.translate(M, M - 10);
+
+  // depth: wide ambient shadow + tight contact shadow (shadow params are in device px)
+  ctx.save();
+  ctx.fillStyle = p.bg;
+  ctx.shadowColor = p.dark ? 'rgba(4,20,26,.28)' : 'rgba(9,34,42,.11)'; ctx.shadowBlur = 34 * S; ctx.shadowOffsetY = 12 * S;
+  rr(ctx, 0, 0, U, H, R); ctx.fill();
+  ctx.shadowColor = p.dark ? 'rgba(4,20,26,.22)' : 'rgba(9,34,42,.08)'; ctx.shadowBlur = 3 * S; ctx.shadowOffsetY = 1 * S;
+  rr(ctx, 0, 0, U, H, R); ctx.fill();
+  ctx.restore();
+  // hairline edge + barely visible inner border
+  ctx.lineWidth = 1; ctx.strokeStyle = p.edge; rr(ctx, .5, .5, U - 1, H - 1, R - .5); ctx.stroke();
+  if (p.inner) { ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(255,255,255,.55)'; rr(ctx, 1.5, 1.5, U - 3, H - 3, R - 1.5); ctx.stroke(); }
+
+  // short centred dividers — they separate without cutting the card
+  ctx.fillStyle = p.div;
+  const dH = Math.round(H * .54), dTop = (H - dH) / 2;
+  for (let i = 1; i < 3; i++) ctx.fillRect(Math.round(colW * i) - .5, dTop, 1, dH);
+
+  const textTop = PAD_T + ICON + ICON_GAP;
+  blocks.forEach((b, i) => {
+    const cx = colW * i + colW / 2;
+    if (imgs[i]) ctx.drawImage(imgs[i], cx - ICON / 2, PAD_T, ICON, ICON);
+    // shorter columns sit on the optical centre of the shared text area
+    let y = textTop + (textH - b.h) * .44;
+    if (b.a.h) y = drawLines(ctx, b.a, cx, y, p.ink);
+    if (b.a.h && b.b.h) y += AB_GAP;
+    if (b.b.h) drawLines(ctx, b.b, cx, y, p.sub);
+  });
+
+  canvas = c;
+  $('out').src = c.toDataURL('image/png');
+}
+
+/* =====================================================================
+   Actions
+   ===================================================================== */
+async function copy() {
+  const m = $('msg');
+  try {
+    const blob = new Promise(res => canvas.toBlob(res, 'image/png'));
+    await navigator.clipboard.write([new ClipboardItem({'image/png': blob})]);
+    m.textContent = 'Стикер скопирован — вставьте его в сторис или пост';
+  } catch (e) {
+    m.textContent = 'Не получилось скопировать — удерживайте стикер и нажмите «Скопировать»';
+  }
+  clearTimeout(copy.t); copy.t = setTimeout(() => { m.textContent = ''; }, 4500);
+}
+$('copy1').onclick = copy; $('copy2').onclick = copy;
+const reset = () => { state = clone(DEFAULTS); save(); buildCols(); buildPal(); setActive(0, false); draw(); };
+$('reset').onclick = reset; $('reset2').onclick = reset;
+$('out').addEventListener('click', e => {
+  const r = e.currentTarget.getBoundingClientRect();
+  const x = (e.clientX - r.left) / r.width * (U + M * 2) - M;
+  const i = Math.max(0, Math.min(2, Math.floor(x / (U / 3))));
+  if (isMobile()) setActive(i, true);
+  else document.querySelector(`.col[data-i="${i}"] input.a`)?.focus();
+});
+
+buildCols(); buildPal(); setActive(0, false);
+draw();
+if (document.fonts) {
+  Promise.all(['500 21px Inter', '600 29px Inter', '700 33px Inter'].map(f => document.fonts.load(f).catch(() => {})))
+    .then(() => document.fonts.ready).then(draw);
+}
+</script>
+</body></html>
